@@ -46,14 +46,21 @@ export default function Register() {
       setErrors(errs);
       return;
     }
-    const alreadyExists = state.users.some((u) => u.email === form.email);
+    const normalizedEmail = form.email.trim().toLowerCase();
+    const alreadyExists = state.users.some(
+      (u) => u.email.trim().toLowerCase() === normalizedEmail
+    );
     if (alreadyExists) {
       setServerError("An account with this email already exists.");
       return;
     }
     dispatch({
       type: ACTIONS.REGISTER,
-      payload: { name: form.name, email: form.email, password: form.password },
+      payload: {
+        name: form.name.trim(),
+        email: normalizedEmail,
+        password: form.password,
+      },
     });
     navigate("/");
   }
